@@ -47,7 +47,7 @@ Game.prototype.updateCanvas = function(){}
 
 Game.prototype.drawCanvas = function(){
 
-##laser.js
+## laser.js
 
 - startpoint
 - firstReflektion
@@ -55,7 +55,7 @@ Game.prototype.drawCanvas = function(){
 - draw
 - valid path
 
-##target.js
+## target.js
 
 - random x
 - random y
