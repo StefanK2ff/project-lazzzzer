@@ -75,7 +75,7 @@ Game.prototype.startLoop = function() {
 
     // 3. UPDATE THE CANVAS
     // Draw the player
-    this.player.draw();
+    //this.laser.draw();
 
     // Draw the target
     
@@ -86,7 +86,8 @@ Game.prototype.startLoop = function() {
     }
 
     //  5. Update Game data/stats
-    this.updateGameStats();
+    //this.updateGameStats();
+    console.log("in loop")
   }.bind(this);
 
   // As loop function will be continuously invoked by
@@ -118,8 +119,8 @@ Game.prototype.removeGameScreen = function() {
   this.gameScreen.remove();
 };
 
-Game.prototype.updateGameStats = function() {
-  this.score += 1;
-  this.livesElement.innerHTML = this.player.lives;
-  this.scoreElement.innerHTML = this.score;
-};
+// Game.prototype.updateGameStats = function() {
+//   this.score += 1;
+//   this.livesElement.innerHTML = this.player.lives;
+//   this.scoreElement.innerHTML = this.score;
+// };

@@ -44,7 +44,7 @@ html {
   
   .container {
     margin: 0 20px;
-    border-color: #111;
+    
   }
   
   @media (min-width: 768px) {
@@ -90,5 +90,10 @@ html {
   
   .game .canvas-container {
     flex: 1;
+    
+  }
+
+  canvas {
+    border: 3px solid #fff;
   }
   
