@@ -16,7 +16,7 @@ Small browser based game using canvas, where the goal is to hit targets indirect
 - Levels
 - 
 
-# Further, possible featers 
+# Further, possible features 
 - permantly saved Scores
 - Data structure
 - Levels with increasing difficulty
@@ -24,34 +24,35 @@ Small browser based game using canvas, where the goal is to hit targets indirect
 # Structure of functions and info
 
 ## main.js
-buildSplashScreen(){}
+createSplashScreen(){...}
+removeSplashScreen(){...}
 
-buildGameScreen(){ }
+createGameScreen(){...}
+removeGameScreen(){...}
 
-buildGameOverScreen(){
-}
+createGameOverScreen(){...}
+removeGameOverScreen(){...}
+
+startGame(){...}
+gameOver(){...}
 
 ## game.js
 
-Game() {}
-  name
-  score
+Game
 
-Game.prototype.startLoop(){}
+On Prorotype
+start
+startLoop
+checkTargetHit
 
-Game.prototype.checkCollisions{}
-
-Game.prototype.clearCanvas = function(){}
-
-Game.prototype.updateCanvas = function(){}
-
-Game.prototype.drawCanvas = function(){
+clearCanvas = function(){}
+updateCanvas = function(){}
+drawCanvas = function(){
 
 ## laser.js
 
-- startpoint
-- firstReflektion
-- path
+On Prototype
+- calculatePath
 - draw
 - valid path
 

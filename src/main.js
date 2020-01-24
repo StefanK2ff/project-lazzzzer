@@ -97,8 +97,8 @@ function main() {
 
     game = new Game();
     game.gameScreen = createGameScreen();
-
     game.start();
+
     // End the game
     game.passGameOverCallback(function() {
       gameOver(game.score);

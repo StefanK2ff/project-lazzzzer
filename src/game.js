@@ -26,8 +26,8 @@ Game.prototype.start = function() {
   // Set the canvas dimensions
   //this.containerWidth = this.canvasContainer.offsetWidth;
   //this.containerHeight = this.canvasContainer.offsetHeight;
-  this.canvas.setAttribute('width', 300);
-  this.canvas.setAttribute('height', 300);
+  this.canvas.setAttribute('width', 1000);
+  this.canvas.setAttribute('height', 1000);
 
   // Create a new laser for the current round
   this.laser = new Laser(this.canvas, 3);
@@ -35,13 +35,13 @@ Game.prototype.start = function() {
   // Add event listener for moving the player
   this.handleKeyDown = function(event) {
     if (event.key === 'ArrowLeft') {
-      this.laser.setDirection('left');
+      this.laser.setAim('left');
     } else if (event.key === 'ArrowRight') {
-      this.laser.setDirection('right');
+      this.laser.setAim('right');
     } else if (event.key === 'a') {
-        this.laser.setDirection('up');
+        this.laser.setAim('up');
     } else if (event.key === 'y') {
-        this.laser.setDirection('down');
+        this.laser.setAim('down');
     }
   }; 
 
@@ -74,8 +74,9 @@ Game.prototype.startLoop = function() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // 3. UPDATE THE CANVAS
-    // Draw the player
-    //this.laser.draw();
+    // Draw the laser
+    //this.laser.calculatePath();
+    this.laser.draw(this.laser.calculatePath());
 
     // Draw the target
     
@@ -87,7 +88,7 @@ Game.prototype.startLoop = function() {
 
     //  5. Update Game data/stats
     //this.updateGameStats();
-    console.log("in loop")
+    
   }.bind(this);
 
   // As loop function will be continuously invoked by
