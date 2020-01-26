@@ -11,10 +11,10 @@ function Laser(canvas, shots) {
 }
 
 Laser.prototype.setAim = function(direction) {
-    if (direction === "up") this.h1Y -= 10; // no curly brakets because just 1 line of code
-    else if (direction === "down") this.h1Y += 10;
-    else if (direction === "left") this.h0X -= 10;
-    else if (direction === "right") this.h0X += 10;
+    if (direction === "up") this.h1Y -= 1; // no curly brakets because just 1 line of code
+    else if (direction === "down") this.h1Y += 1;
+    else if (direction === "left") this.h0X -= 1;
+    else if (direction === "right") this.h0X += 1;
 }
 
 Laser.prototype.calculatePath = function() {
@@ -32,7 +32,7 @@ Laser.prototype.calculatePath = function() {
     var h3Y;
     var h4Y;
     var h4X;
-    var pathObj;
+    //var pathObj;
 
     //caluate grad an ref of path 1
     p1grad = (this.h0Y-this.h1Y)/(this.h0X-this.h1X);
@@ -40,7 +40,6 @@ Laser.prototype.calculatePath = function() {
     //calculate grad and ref of path 2
     p2grad = (0 - p1grad);
     p2ref = this.h1Y - p2grad * this.h1X;
-        console.log("p2 grad ", p2grad, " p2ref", p2ref);
     //calculate Hitpoint 2 (top)
     h2Y = 0; // FIXED, TOP OF CANVAS
     h2X = Number(h2Y-p2ref) / p2grad;
@@ -57,41 +56,76 @@ Laser.prototype.calculatePath = function() {
     h4Y = 1000; // FIXED, Bottom end of canvas
     h4X = (h4Y - p4ref) / p4grad;
     //build path obj
-    pathObj = {
+    this.pathObj_points = { // stores the dots of the path
         h0: [this.h0X, this.h0Y],
         h1: [this.h1X, this.h1Y],
         h2: [h2X, h2Y],
         h3: [h3X, h3Y],
         h4: [h4X, h4Y],
     };
+    this.pathObj_paths = { // stores the gradients and reference points for each path
+        p1: [p1grad,p1ref],
+        p2: [p2grad,p2ref],
+        p3: [p3grad,p3ref],
+        p4: [p4grad,p4ref],
+    }
 
-    return pathObj
+    return this.pathObj_points
 };
 
-// Player.prototype.didCollide = function(enemy) {
-//   
-//   return false;
-// };
+Laser.prototype.checkHitTarget = function(target, pathObj) { 
+    var ilt_x = target.x; // intersection left top x coodrinate
+    var ilt_y = target.y; // intersection left top y coordinate
+    var irt_x = target.x + target.size; // right top
+    var irt_y = target.y;
+    var ilb_x = target.x + target.size;
+    var ilb_y = target.y + target.size;
+    var irb_x = target.x + target.size;
+    var irb_y = target.y + target.size;
+    var hit = false;
 
-// Player.prototype.handleScreenCollision = function() {
-//   
-// };
+    //check for target's upper horizontal line
+    //  Intersection point of path and target's upper line
+    var iPLt_x = (target.y - pathObj.p4[1]) / pathObj.p4[0]; // intersectionpoint Path Line top x coordinate
+    var iPlt_y = target.y;
+    //check for target's left vertical line
+    //  Itersection point of path and target's left vertical line
+    var iPLl_x = target.x;
+    var iPLl_y = pathObj.p4[0] * iPLl_x + pathObj.p4[1];
+    //check for target's right vertical line
+    //  Itersection point of path and target's right vertical line
+    var iPLr_x = target.x + target.size;
+    var iPLr_y = pathObj.p4[0] * iPLr_x + pathObj.p4[1];
+    //  Check if x value of intersection point is between IRT_x and ILT_x
+    if (iPLt_x >= ilt_x && iPLt_x <= irt_x){
+        hit = true;
+    } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
+        hit = true;
+    } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
+        hit = true;
+    }
 
-// Player.prototype.removeLife = function() {
-//   this.lives -= 1;
-// };
+    return hit;  
+};
+
+Laser.prototype.removeTry = function() {
+  
+};
+
+Laser.prototype.fire = function() {
+  //this.lives -= 1;
+};
 
 Laser.prototype.draw = function(path) {
     this.ctx.fillStyle;
     this.ctx.beginPath();
-    console.log(path)
-    this.ctx.moveTo(path.h0[0], path.h0[1]);         //(this.fireposX, this.fireposY); //start of line
-    this.ctx.lineTo(path.h1[0], path.h1[1]);                            // (this.firstHitX, this.firstHitY);  // end of line
+    this.ctx.moveTo(path.h0[0], path.h0[1]);    //start of line
+    this.ctx.lineTo(path.h1[0], path.h1[1]); 
     this.ctx.lineTo(path.h2[0], path.h2[1]);
     this.ctx.lineTo(path.h3[0], path.h3[1]);
-    this.ctx.lineTo(path.h4[0], path.h4[1]);
-    this.ctx.lineWidth = 2; // size
+    this.ctx.lineTo(path.h4[0], path.h4[1]);    // end of line
+    this.ctx.lineWidth = 2;                     // size
     this.ctx.strokeStyle = 'red';
-    this.ctx.stroke();          // Render the path
+    this.ctx.stroke();                          // Render the path
     this.ctx.closePath();
 };

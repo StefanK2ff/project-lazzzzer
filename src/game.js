@@ -6,7 +6,7 @@ function Game() {
   this.laser = null;
   this.gameIsOver = false;
   this.gameScreen = null;
-  //this.target = null;
+  this.target;
   //this.score = 0;
   //this.level
   //this.tries
@@ -31,6 +31,8 @@ Game.prototype.start = function() {
 
   // Create a new laser for the current round
   this.laser = new Laser(this.canvas, 3);
+  // Create the initial target
+  this.target = new Target(this.canvas);
 
   // Add event listener for moving the player
   this.handleKeyDown = function(event) {
@@ -57,28 +59,26 @@ Game.prototype.start = function() {
 
 Game.prototype.startLoop = function() {
   var loop = function() {
-    // 1. UPDATE THE STATE OF LASER AND later TARGET
+    
 
-    // // 0. Our laser is  already created - via `game.start()`
-
-    // // 1. Create new taret randomly TO BE
+    // 1. Create new taret randomly TO BE
     // if (Math.random() > 0.98) {
     //   var randomY = this.canvas.height * Math.random();
     //   this.enemies.push(new Enemy(this.canvas, randomY, 5));
-    // }
-
-    // 2. Check if player had hit any enemy (check all enemies)
-    //this.checkCollisions();
+    
 
     // 2. CLEAR THE CANVAS
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // 3. UPDATE THE CANVAS
-    // Draw the laser
-    //this.laser.calculatePath();
-    this.laser.draw(this.laser.calculatePath());
-
+    // calculate the path of the laser
+    this.laser.calculatePath();
+    // draw the laser
+    this.laser.draw(this.laser.pathObj_points);
     // Draw the target
+    this.target.draw();
+    // check if there was a hit
+    //has to be done for each 
+    console.log(this.laser.checkHitTarget(this.target, this.laser.pathObj_paths));
+   
     
 
     // 4. TERMINATE LOOP IF GAME IS OVER
