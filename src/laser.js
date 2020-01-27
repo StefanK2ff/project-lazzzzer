@@ -12,7 +12,8 @@ function Laser(canvas) {
   this.h1Y = this.h1yStart;
   this.color = "black";
   this.laserSize = 1;
-  this.helpercolor = "#3CFF33"
+  this.helpercolor1 = "#3CFF33";
+  this.helpercolor2 = "#3CFF33";
 }
 
 Laser.prototype.setAim = function(direction) {
@@ -112,19 +113,29 @@ Laser.prototype.checkHitTarget = function(target, path) {
     return hit;  
 };
 Laser.prototype.drawStartPoints = function(h0x, h1y) {
-    this.ctx.fillStyle = this.helpercolor;
+    this.ctx.fillStyle = this.helpercolor1;
     this.ctx.fillRect(h0x, this.canvas.height-5, 5, 5); //pos x pos y width height
-    this.ctx.fillStyle = this.helpercolor;
+    this.ctx.fillStyle = this.helpercolor1;
     this.ctx.fillRect(0, h1y, 5, 5);            //pos x pos y width height
     this.ctx.fillStyle;
     this.ctx.beginPath();
     this.ctx.moveTo(h0x, this.canvas.height);    //start of line
-    this.ctx.lineTo(0, h1y,);
+    this.ctx.lineTo(0, h1y);
     this.ctx.lineWidth = 1;                      // size
-    this.ctx.strokeStyle = this.helpercolor;
+    this.ctx.strokeStyle = this.helpercolor1;
     this.ctx.stroke();                          // Render the path
-    this.ctx.closePath();
-};
+    this.ctx.closePath();                       //end of line
+}
+
+Laser.prototype.drawSecondHelper = function(x, y) {
+    // this.ctx.beginPath();
+    // this.ctx.moveTo(0, y);    //start of line
+    // this.ctx.lineTo(x-50, 0-50);
+    // this.ctx.lineWidth = 1;                      // size
+    // this.ctx.strokeStyle = this.helpercolor2;
+    // this.ctx.stroke();                          // Render the path
+    // this.ctx.closePath(); 
+}
 
 Laser.prototype.draw = function(path) {
     this.ctx.fillStyle;
@@ -138,4 +149,4 @@ Laser.prototype.draw = function(path) {
     this.ctx.strokeStyle = this.color;
     this.ctx.stroke();                          // Render the path
     this.ctx.closePath();
-};
+}

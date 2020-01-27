@@ -11,14 +11,14 @@ html {
   body {
     margin: 0;
     padding: 0;
-    background-color: grey;
+    background-color: black;
   }
   
   
   /* ---- typography ---- */
   
   body {
-    color: rgb(0, 0, 0);
+    color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 16px;
     line-height: 147%;

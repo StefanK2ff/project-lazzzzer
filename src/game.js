@@ -26,7 +26,7 @@ Game.prototype.start = function() {
   this.shotsElement = this.gameScreen.querySelector('.shots .value');
 
   // Set the canvas dimensions
-  this.canvas.setAttribute('width', 800);
+  this.canvas.setAttribute('width', 600);
   this.canvas.setAttribute('height', 600);
 
   // Create a new laser for the current round
@@ -34,6 +34,7 @@ Game.prototype.start = function() {
   // Create the initial target
   
   this.target = new Target(this.canvas);
+  this.target.size = this.target.inititalSize;
 
   // Add event listener for moving the player
   this.handleKeyDown = function(event) {
@@ -69,10 +70,13 @@ Game.prototype.startLoop = function() {
     // draw the laser (to be done when there shot)
     this.laser.draw(this.laser.pathObj_points);
     // Draw the target
-    this.target.size = this.target.inititalSize;
+    
     this.target.draw();
     // Draw the indikators
     this.laser.drawStartPoints(this.laser.h0X, this.laser.h1Y);
+    // Draw the helper
+    this.laser.drawSecondHelper(this.laser.pathObj_points.h2[0], this.laser.pathObj_points.h1[1])
+    
       
     // TERMINATE LOOP IF GAME IS OVER --> when tries are zero
     if (!this.gameIsOver) {
@@ -150,7 +154,7 @@ Game.prototype.fire = function(){
   this.laser.helpercolor = "red";
   setTimeout(function() {
     this.roundHandling();
-  }.bind(this),500)    
+  }.bind(this),500)
 }
 
 Game.prototype.updateGameStats = function() {
@@ -160,5 +164,12 @@ Game.prototype.updateGameStats = function() {
 };
 
 Game.prototype.levelAdjust = function(level) {
-  //Math.Floor(level/3)
+  if (this.level%3 === 0 && this.target.size > 5) {
+    this.target.size = this.target.size * 0.8
+    console.log(this.target.size)
+  }
+  if (this.level > 9) {
+    this.helpercolor2 = black;
+  }
 }
+
