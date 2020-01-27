@@ -69,7 +69,7 @@ Game.prototype.startLoop = function() {
     // draw the laser (to be done when there shot)
     this.laser.draw(this.laser.pathObj_points);
     // Draw the target
-    this.target.size = this.rarget.inititalSize;
+    this.target.size = this.target.inititalSize;
     this.target.draw();
     // Draw the indikators
     this.laser.drawStartPoints(this.laser.h0X, this.laser.h1Y);
@@ -125,7 +125,7 @@ Game.prototype.roundHandling = function() {
     this.tries = 3;
     //set level
     this.level++;
-    this.levelAdjust(level);
+    this.levelAdjust(this.level);
     //set laser back to start position
     this.laser.h0X = this.laser.h0XStart;
     this.laser.h1Y = this.laser.h1yStart;
@@ -160,5 +160,5 @@ Game.prototype.updateGameStats = function() {
 };
 
 Game.prototype.levelAdjust = function(level) {
-  Math.Floor(level/3)
+  //Math.Floor(level/3)
 }
