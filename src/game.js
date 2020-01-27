@@ -169,7 +169,7 @@ Game.prototype.levelAdjust = function(level) {
     console.log(this.target.size)
   }
   if (this.level > 9) {
-    this.helpercolor2 = black;
+    this.helpercolor2 = "black";
   }
 }
 
