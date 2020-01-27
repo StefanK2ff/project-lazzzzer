@@ -11,14 +11,14 @@ html {
   body {
     margin: 0;
     padding: 0;
-    background-color: black;
+    background-color: grey;
   }
   
   
   /* ---- typography ---- */
   
   body {
-    color: #fff;
+    color: rgb(0, 0, 0);
     font-family: 'Courier New', Courier, monospace;
     font-size: 16px;
     line-height: 147%;
@@ -79,6 +79,14 @@ html {
   .game .score {
     flex: 1;
   }
+
+  .game .shots {
+    flex: 1;
+  }
+  
+  .game .score {
+    flex: 1;
+  }
   
   .game .label {
     font-weight: bold;
@@ -93,7 +101,19 @@ html {
     
   }
 
+  .gameText {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   canvas {
     border: 3px solid #fff;
+  }
+
+  .btn {
+    width: 200px;
+    margin: 0 auto 0 auto;
   }
   

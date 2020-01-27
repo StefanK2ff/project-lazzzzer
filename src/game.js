@@ -7,12 +7,13 @@ function Game() {
   this.gameIsOver = false;
   this.gameScreen = null;
   this.target;
-  //this.score = 0;
-  //this.level
-  //this.tries
+  this.hitTarget = false;
+  this.score = 0;
+  this.level = 1;
+  this.tries = 3;
 }
 
-// Append canvas to the DOM, create a laser and start the Canvas loop
+// Append canvas to the DOM, create a laser and a target and start the Canvas loop
 Game.prototype.start = function() {
   // Save reference to canvas and its container. Create ctx
   this.canvasContainer = document.querySelector('.canvas-container');
@@ -20,18 +21,18 @@ Game.prototype.start = function() {
   this.ctx = this.canvas.getContext('2d');
 
   // Save reference to the score and level elements
-  //this.levelElement = this.gameScreen.querySelector('.level .value');
-  //this.scoreElement = this.gameScreen.querySelector('.score .value');
+  this.levelElement = this.gameScreen.querySelector('.level .value');
+  this.scoreElement = this.gameScreen.querySelector('.score .value');
+  this.shotsElement = this.gameScreen.querySelector('.shots .value');
 
   // Set the canvas dimensions
-  //this.containerWidth = this.canvasContainer.offsetWidth;
-  //this.containerHeight = this.canvasContainer.offsetHeight;
-  this.canvas.setAttribute('width', 1000);
-  this.canvas.setAttribute('height', 1000);
+  this.canvas.setAttribute('width', 800);
+  this.canvas.setAttribute('height', 600);
 
   // Create a new laser for the current round
-  this.laser = new Laser(this.canvas, 3);
+  this.laser = new Laser(this.canvas);
   // Create the initial target
+  
   this.target = new Target(this.canvas);
 
   // Add event listener for moving the player
@@ -41,9 +42,11 @@ Game.prototype.start = function() {
     } else if (event.key === 'ArrowRight') {
       this.laser.setAim('right');
     } else if (event.key === 'a') {
-        this.laser.setAim('up');
+      this.laser.setAim('up');
     } else if (event.key === 'y') {
-        this.laser.setAim('down');
+      this.laser.setAim('down');
+    } else if (event.key === ' ' && !this.gameIsOver) {
+      this.fire(); 
     }
   }; 
 
@@ -59,29 +62,19 @@ Game.prototype.start = function() {
 
 Game.prototype.startLoop = function() {
   var loop = function() {
-    
-
-    // 1. Create new taret randomly TO BE
-    // if (Math.random() > 0.98) {
-    //   var randomY = this.canvas.height * Math.random();
-    //   this.enemies.push(new Enemy(this.canvas, randomY, 5));
-    
-
-    // 2. CLEAR THE CANVAS
+    // CLEAR THE CANVAS
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     // calculate the path of the laser
     this.laser.calculatePath();
-    // draw the laser
+    // draw the laser (to be done when there shot)
     this.laser.draw(this.laser.pathObj_points);
     // Draw the target
+    this.target.size = this.rarget.inititalSize;
     this.target.draw();
-    // check if there was a hit
-    //has to be done for each 
-    console.log(this.laser.checkHitTarget(this.target, this.laser.pathObj_paths));
-   
-    
-
-    // 4. TERMINATE LOOP IF GAME IS OVER
+    // Draw the indikators
+    this.laser.drawStartPoints(this.laser.h0X, this.laser.h1Y);
+      
+    // TERMINATE LOOP IF GAME IS OVER --> when tries are zero
     if (!this.gameIsOver) {
       window.requestAnimationFrame(loop);
     }
@@ -97,12 +90,8 @@ Game.prototype.startLoop = function() {
   // pointing to the `game` object, like this:
   // var loop = (function(){}).bind(this);
 
-  window.requestAnimationFrame(loop);
+  loop();
 };
-
-// Game.prototype.checkHit = function() {
-//   this.target.
-// };
 
 Game.prototype.passGameOverCallback = function(callback) {
   this.onGameOverCallback = callback;
@@ -120,8 +109,56 @@ Game.prototype.removeGameScreen = function() {
   this.gameScreen.remove();
 };
 
-// Game.prototype.updateGameStats = function() {
-//   this.score += 1;
-//   this.livesElement.innerHTML = this.player.lives;
-//   this.scoreElement.innerHTML = this.score;
-// };
+Game.prototype.roundHandling = function() {
+  // check if there was a hit for each part of the laser
+  this.laser.pathArrayPaths.forEach (element => {
+    if (this.laser.checkHitTarget(this.target, element)){
+      this.hitTarget = true;
+      console.log(this.hitTarget);
+    };
+  });
+  //do something if there was a hit
+  if (this.hitTarget) {
+    //set score
+    this.score = this.score + this.tries * 5;
+    // set tries back to 3
+    this.tries = 3;
+    //set level
+    this.level++;
+    this.levelAdjust(level);
+    //set laser back to start position
+    this.laser.h0X = this.laser.h0XStart;
+    this.laser.h1Y = this.laser.h1yStart;
+    //modify target
+    this.target.changePosRandom();
+    //set hit back to false
+    this.hitTarget = false;
+  } else {
+    this.tries--; //reduce tries by one if the 
+    if (this.tries <= 0) {
+      this.gameOver();
+    }
+  }
+  this.laser.color = "black";
+  this.laser.helpercolor = "#3CFF33";
+  this.updateGameStats();
+};
+
+Game.prototype.fire = function(){
+  //make laser visible for a short time
+  this.laser.color = "red";
+  this.laser.helpercolor = "red";
+  setTimeout(function() {
+    this.roundHandling();
+  }.bind(this),500)    
+}
+
+Game.prototype.updateGameStats = function() {
+  this.levelElement.innerHTML = this.level;
+  this.scoreElement.innerHTML = this.score;
+  this.shotsElement.innerHTML = this.tries;
+};
+
+Game.prototype.levelAdjust = function(level) {
+  Math.Floor(level/3)
+}

@@ -16,8 +16,10 @@ function main() {
   function createSplashScreen() {
     splashScreen = buildDom(`
     <main>
-      <h1>Project laZZZZer</h1>
-      <button>Start</button>
+      <div class="gameText">
+        <h1>Project laZZZZer</h1>
+        <button class="btn">Start</button>
+      </div>
     </main>
   `);
 
@@ -39,13 +41,17 @@ function main() {
     var gameScreen = buildDom(`
     <main class="game container">
       <header>
-        <div class="lives">
-          <span class="label">Lives:</span>
-          <span class="value"></span>
+        <div class="level">
+          <span class="label">Level:</span>
+          <span class="value">1</span>
         </div>
         <div class="score">
           <span class="label">Score:</span>
-          <span class="value"></span>
+          <span class="value">0</span>
+        </div>
+        <div class="shots">
+          <span class="label">Shots left:</span>
+          <span class="value">3</span>
         </div>
       </header>
       <div class="canvas-container">
@@ -64,20 +70,26 @@ function main() {
 
   // -- game over screen
 
-  function createGameOverScreen(score) {
+  function createGameOverScreen(score, level) {
     gameOverScreen = buildDom(`
       <main>
+      <div class="gameText">
         <h1>Game over</h1>
-        <p>Your score: <span></span></p>
-        <button>Restart</button>
+        <p>Your score: <span class="final-score"></span></p>
+        <p>You reached Level <span class="final-level"></span></p>
+        <button class="btn">Restart</button>
+      </div>
     </main>
     `);
 
     var button = gameOverScreen.querySelector('button');
     button.addEventListener('click', startGame);
 
-    var span = gameOverScreen.querySelector('span');
+    var span = gameOverScreen.querySelector('.final-score');
     span.innerText = score;
+
+    var span = gameOverScreen.querySelector('.final-level');
+    span.innerText = level;
 
     document.body.appendChild(gameOverScreen);
   }
@@ -101,13 +113,13 @@ function main() {
 
     // End the game
     game.passGameOverCallback(function() {
-      gameOver(game.score);
+      gameOver(game.score, game.level);
     });
   }
 
-  function gameOver(score) {
+  function gameOver(score, level) {
     removeGameScreen();
-    createGameOverScreen(score);
+    createGameOverScreen(score, level);
   }
 
   // -- initialize Splash screen on initial start
