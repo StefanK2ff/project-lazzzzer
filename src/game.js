@@ -67,32 +67,22 @@ Game.prototype.startLoop = function() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     // calculate the path of the laser
     this.laser.calculatePath();
-    // draw the laser (to be done when there shot)
-    this.laser.draw(this.laser.pathObj_points);
+    // DRAW LASERS
+    // draw the full laser but invisible
+    this.laser.drawPath(this.laser.calculatePath(),this.laser.color,2)
+    // HELPER: draw the the first bit of the laser as support
+    this.laser.drawPath(this.laser.helperExtendedArrayPoints, this.laser.helpercolor1,3)
     // Draw the target
-    
     this.target.draw();
     // Draw the indikators
     this.laser.drawStartPoints(this.laser.h0X, this.laser.h1Y);
-    // Draw the helper
-    this.laser.drawSecondHelper(this.laser.pathObj_points.h2[0], this.laser.pathObj_points.h1[1])
-    
-      
-    // TERMINATE LOOP IF GAME IS OVER --> when tries are zero
+    // TERMINATE LOOP IF GAME IS OVER
     if (!this.gameIsOver) {
       window.requestAnimationFrame(loop);
     }
-
-    //  5. Update Game data/stats
-    //this.updateGameStats();
-    
   }.bind(this);
-
-  // As loop function will be continuously invoked by
-  // the `window` object- `window.requestAnimationFrame(loop)`
-  // we have to bind the function so that value of `this` is
-  // pointing to the `game` object, like this:
-  // var loop = (function(){}).bind(this);
+  // As loop function will be continuously invoked by  `window` object- `window.requestAnimationFrame(loop)` 
+  // we have to bind the function so that value of `this` is pointing to the `game` object, like this: var loop = (function(){}).bind(this);
 
   loop();
 };
@@ -102,7 +92,7 @@ Game.prototype.passGameOverCallback = function(callback) {
 };
 
 Game.prototype.gameOver = function() {
-  // flag `gameIsOver = true` stops the loop
+  // flag `gameIsOver = true stops the loop
   this.gameIsOver = true;
   
   // Call the gameOver function from `main` to show the Game Over Screen
@@ -115,10 +105,9 @@ Game.prototype.removeGameScreen = function() {
 
 Game.prototype.roundHandling = function() {
   // check if there was a hit for each part of the laser
-  this.laser.pathArrayPaths.forEach (element => {
-    if (this.laser.checkHitTarget(this.target, element)){
+  this.laser.pathArrayLines.forEach (line => {
+    if (this.laser.checkHitTarget(this.target, line)){
       this.hitTarget = true;
-      console.log(this.hitTarget);
     };
   });
   //do something if there was a hit
@@ -130,29 +119,26 @@ Game.prototype.roundHandling = function() {
     //set level
     this.level++;
     this.levelAdjust(this.level);
-    //set laser back to start position
-    this.laser.h0X = this.laser.h0XStart;
-    this.laser.h1Y = this.laser.h1yStart;
     //modify target
     this.target.changePosRandom();
     //set hit back to false
     this.hitTarget = false;
+    this.updateGameStats();
   } else {
-    this.tries--; //reduce tries by one if the 
+    this.tries--; //reduce tries by one if the laser does not hit
     if (this.tries <= 0) {
-      this.gameOver();
+      this.gameOver(); // sets game over if tries are zero
     }
   }
-  this.laser.color = "black";
-  this.laser.helpercolor = "#3CFF33";
-  this.updateGameStats();
 };
 
 Game.prototype.fire = function(){
   //make laser visible for a short time
-  this.laser.color = "red";
+  this.laser.color = "red"
   this.laser.helpercolor = "red";
+  
   setTimeout(function() {
+    this.laser.color = "black";
     this.roundHandling();
   }.bind(this),500)
 }
@@ -167,9 +153,9 @@ Game.prototype.levelAdjust = function(level) {
   if (this.level%3 === 0 && this.target.size > 5) {
     this.target.size = this.target.size * 0.8
     console.log(this.target.size)
-  }
-  if (this.level > 9) {
-    this.helpercolor2 = "black";
+  };
+  if (this.level >= 9) {
+    this.laser.helpercolor1 = "";
   }
 }
 
