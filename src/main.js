@@ -21,7 +21,7 @@ function main() {
       </div>
       <div class="instructions">
         <strong>Instructions:</strong>
-          <p>Hit as many targets with the laser reflected by the walls before running out of shots. You will not see the laser during aming, you have to guess its posision! </p>
+          <p>Hit as many targets with the laser reflected by the walls before running out of shots. You will not see the laser during aiming, you have to guess where he will be reflected! </p>
           <strong>Commands:</strong>
           <ul>
             <li>Use the arrow keys to adjust the first part of the laser (green)</li>

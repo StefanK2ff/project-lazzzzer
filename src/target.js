@@ -10,7 +10,6 @@ function Target(canvas) { // posX, posY, size
 }
 
 Target.prototype.changePosRandom = function() {
-    console.log(this)
     this.changeXPosRandom();
     this.changeYPosRandom();
 }

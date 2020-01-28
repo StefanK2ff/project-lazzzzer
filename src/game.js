@@ -72,6 +72,8 @@ Game.prototype.startLoop = function() {
     this.laser.drawPath(this.laser.calculatePath(),this.laser.color,2)
     // HELPER: draw the the first bit of the laser as support
     this.laser.drawPath(this.laser.helperExtendedArrayPoints, this.laser.helpercolor1,3)
+    // OBSTACLE: draw the barrier in the middle
+    this.laser.drawPath([{x: this.canvas.width/2, y: this.laser.barrierTop}, {x: this.canvas.width/2, y: this.canvas.height}], "white",3)
     // Draw the target
     this.target.draw();
     // Draw the indikators
@@ -106,7 +108,7 @@ Game.prototype.removeGameScreen = function() {
 Game.prototype.roundHandling = function() {
   // check if there was a hit for each part of the laser
   this.laser.pathArrayLines.forEach (line => {
-    if (this.laser.checkHitTarget(this.target, line)){
+    if (this.checkHitTarget(this.target, line)){ 
       this.hitTarget = true;
     };
   });
@@ -122,14 +124,14 @@ Game.prototype.roundHandling = function() {
     //modify target
     this.target.changePosRandom();
     //set hit back to false
-    this.hitTarget = false;
-    this.updateGameStats();
+    this.hitTarget = false; 
   } else {
     this.tries--; //reduce tries by one if the laser does not hit
     if (this.tries <= 0) {
       this.gameOver(); // sets game over if tries are zero
     }
   }
+  this.updateGameStats();
 };
 
 Game.prototype.fire = function(){
@@ -151,11 +153,43 @@ Game.prototype.updateGameStats = function() {
 
 Game.prototype.levelAdjust = function(level) {
   if (this.level%3 === 0 && this.target.size > 5) {
-    this.target.size = this.target.size * 0.8
-    console.log(this.target.size)
+    this.target.size = this.target.size * 0.8;
   };
   if (this.level >= 9) {
     this.laser.helpercolor1 = "";
   }
 }
 
+Game.prototype.checkHitTarget = function(target, line) { 
+  var ilt_x = target.x; // intersection left top x coodrinate
+  var ilt_y = target.y; // intersection left top y coordinate
+  var irt_x = target.x + target.size; // right top
+  var irt_y = target.y;
+  var ilb_x = target.x + target.size;
+  var ilb_y = target.y + target.size;
+  var irb_x = target.x + target.size;
+  var irb_y = target.y + target.size;
+  var hit = false;
+
+  //check for target's upper horizontal line
+  //  Intersection point of path and target's upper line
+  var iPLt_x = (target.y - line.ref) / line.grad; // intersectionpoint Path Line top x coordinate
+  var iPlt_y = target.y;
+  //check for target's left vertical line
+  //  Itersection point of path and target's left vertical line
+  var iPLl_x = target.x;
+  var iPLl_y = line.grad * iPLl_x + line.ref;
+  //check for target's right vertical line
+  //  Itersection point of path and target's right vertical line
+  var iPLr_x = target.x + target.size;
+  var iPLr_y = line.grad * iPLr_x + line.ref;
+  //  Check if x value of intersection point is between IRT_x and ILT_x
+  if (iPLt_x >= ilt_x && iPLt_x <= irt_x){
+      hit = true;
+  } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
+      hit = true;
+  } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
+      hit = true;
+  }
+  return hit;  
+};

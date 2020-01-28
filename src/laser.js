@@ -12,6 +12,7 @@ function Laser(canvas) {
   this.h1Y = this.h1yStart;
   this.color = "black";
   this.helpercolor1 = "#3CFF33";
+  this.barrierTop = this.canvas.height*0.35;
 }
 
 Laser.prototype.setAim = function(direction) {
@@ -25,47 +26,79 @@ Laser.prototype.setAim = function(direction) {
         if(this.h0X > this.canvas.width*0.1) this.h0X -= 3;
     }
     else if (direction === "right") {
-        if(this.h0X <= this.canvas.width/2-this.canvas.width*0.5) this.h0X += 3;
+        if(this.h0X <= this.canvas.width/2-this.canvas.width*0.05) this.h0X += 3;
     }
 }
 
 Laser.prototype.calculatePath = function() {
-    var p1grad; //gradient of 1 path
-    var p2grad;
-    var p3grad;
-    var p4grad;
-    var p1ref; // where the 1. path crosses the Y axis
-    var p2ref;
-    var p3ref = 0;
-    var p4ref;
-    var h2X; //hit2 X position
-    var h2Y;
-    var h3X;
-    var h3Y;
-    var h4Y;
-    var h4X;
+    var proceed = true; 
+    //function to find out if any path hits the middle barrier
+    var hitBarrier = function (grad, ref, barrierTop) {
+        if(grad * this.canvas.width/2 + ref > barrierTop) {
+            return true
+        } else return false
+    }.bind(this);
 
-    //caluate grad an ref of path 1
-    p1grad = (this.h0Y-this.h1Y)/(this.h0X-this.h1X);
-    p1ref = this.h0Y - (p1grad * this.h0X);
-    //calculate grad and ref of path 2
-    p2grad = (0 - p1grad);
-    p2ref = this.h1Y - p2grad * this.h1X;
+    //caluate gradiend and reference point of path 1 (between hitpoint 0 (h0) and hitpoint 1 (h1))
+    var p1grad = (this.h0Y-this.h1Y)/(this.h0X-this.h1X);
+    var p1ref = this.h0Y - (p1grad * this.h0X);
+    
+    //Path and hitpoint 2 
+    var p2grad = (0 - p1grad); // gradient
+    var p2ref = this.h1Y - p2grad * this.h1X; // reference point
     //calculate Hitpoint 2 (top)
-    h2Y = 0; // FIXED, TOP OF CANVAS
-    h2X = Number(h2Y-p2ref) / p2grad;
-    // calculate grad and ref of path 3
-    p3grad = (0 - p2grad);
-    p3ref = Number(h2Y) - Number(p3grad) * Number(h2X);
-    // calculate hitpoint 3 (right)
-    h3X = this.canvas.width; // FIXED, RIGHT border of canvase
-    h3Y = h3X * p3grad + p3ref;
-    // calculate grad and ref of path 4
-    p4grad = 0-p3grad;
-    p4ref = h3Y - p4grad * h3X;
-    // calculate hitpoint 4 (bottom)
-    h4Y = this.canvas.height; // FIXED, Bottom end of canvas
-    h4X = (h4Y - p4ref) / p4grad;
+    var h2Y;
+    var h2X;
+    //check if ray passed barrier
+    //console.log(proceed);
+    if(hitBarrier(p2grad, p2ref, this.barrierTop)) {
+        proceed = false;
+        h2Y = p2grad*this.canvas.width/2+p2ref
+        h2X = Number(h2Y-p2ref) / p2grad;
+    } else {
+        h2Y = 0; // fixed, always at the top of the canvas
+        h2X = Number(h2Y-p2ref) / p2grad;
+    }
+    if (proceed) {
+        //path and hitpoint 3
+        var p3grad = (0 - p2grad);
+        var p3ref = Number(h2Y) - Number(p3grad) * Number(h2X);
+        if(hitBarrier(p3grad,p3ref,this.barrierTop)) {
+            proceed = false;
+            var h3X = this.canvas.width/2;
+            var h3Y = h3X * p3grad + p3ref;
+        } else {
+            var h3X = this.canvas.width; // FIXED, RIGHT border of canvase
+            var h3Y = h3X * p3grad + p3ref;
+            proceed = true;
+        }   
+    }
+
+    if (proceed) {
+        //path and hitpoint 4
+        var h4Y;
+        var h4X;
+        var p4grad = 0-p3grad;
+        var p4ref = h3Y - p4grad * h3X;
+        if(hitBarrier(p4grad, p4ref, this.barrierTop)) {
+            h4X = this.canvas.width/2;
+            h4Y = h4X * p4grad + p4ref;
+            proceed = true;
+        } else {
+            h4Y = this.canvas.height; // FIXED, Bottom end of canvas
+            h4X = (h4Y - p4ref) / p4grad;
+            proceed = false;
+        }
+    }
+
+    if (proceed) {
+        // path and hitpoint 5
+        var h5Y, h5X;
+        var p5grad = (0 - p4grad);
+        var p5ref = h4Y - p5grad * h4X;
+        h5X = this.canvas.width;
+        h5Y = h5X * p5grad + p5ref;
+    }
     
     //Store all Points
     this.pathArrayPoints = [ // stores the endpoints of each line
@@ -73,7 +106,8 @@ Laser.prototype.calculatePath = function() {
         {x: this.h1X,       y: this.h1Y},
         {x: h2X,            y: h2Y},
         {x: h3X,            y: h3Y},
-        {x: h4X,            y: h4Y}
+        {x: h4X,            y: h4Y},
+        {x: h5X,            y: h5Y}
     ];
     this.helperArrayPoints = [
         {x: this.h0X,       y: this.h0Y},
@@ -82,7 +116,7 @@ Laser.prototype.calculatePath = function() {
     this.helperExtendedArrayPoints = [
         {x: this.h0X,       y: this.h0Y},
         {x: this.h1X,       y: this.h1Y},
-        {x: (h2X*0.1),     y: (this.h1Y*(1-0.1))}
+        {x: (h2X*0.1),      y: p2grad*(h2X*0.1)+p2ref}
     ];
 
     this.pathArrayLines = [ // stores the gradients and reference points for each path
@@ -94,39 +128,39 @@ Laser.prototype.calculatePath = function() {
     return this.pathArrayPoints;
 };
 
-Laser.prototype.checkHitTarget = function(target, line) { 
-    var ilt_x = target.x; // intersection left top x coodrinate
-    var ilt_y = target.y; // intersection left top y coordinate
-    var irt_x = target.x + target.size; // right top
-    var irt_y = target.y;
-    var ilb_x = target.x + target.size;
-    var ilb_y = target.y + target.size;
-    var irb_x = target.x + target.size;
-    var irb_y = target.y + target.size;
-    var hit = false;
+// Laser.prototype.checkHitTarget = function(target, line) { 
+//     var ilt_x = target.x; // intersection left top x coodrinate
+//     var ilt_y = target.y; // intersection left top y coordinate
+//     var irt_x = target.x + target.size; // right top
+//     var irt_y = target.y;
+//     var ilb_x = target.x + target.size;
+//     var ilb_y = target.y + target.size;
+//     var irb_x = target.x + target.size;
+//     var irb_y = target.y + target.size;
+//     var hit = false;
 
-    //check for target's upper horizontal line
-    //  Intersection point of path and target's upper line
-    var iPLt_x = (target.y - line.ref) / line.grad; // intersectionpoint Path Line top x coordinate
-    var iPlt_y = target.y;
-    //check for target's left vertical line
-    //  Itersection point of path and target's left vertical line
-    var iPLl_x = target.x;
-    var iPLl_y = line.grad * iPLl_x + line.ref;
-    //check for target's right vertical line
-    //  Itersection point of path and target's right vertical line
-    var iPLr_x = target.x + target.size;
-    var iPLr_y = line.grad * iPLr_x + line.ref;
-    //  Check if x value of intersection point is between IRT_x and ILT_x
-    if (iPLt_x >= ilt_x && iPLt_x <= irt_x){
-        hit = true;
-    } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
-        hit = true;
-    } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
-        hit = true;
-    }
-    return hit;  
-};
+//     //check for target's upper horizontal line
+//     //  Intersection point of path and target's upper line
+//     var iPLt_x = (target.y - line.ref) / line.grad; // intersectionpoint Path Line top x coordinate
+//     var iPlt_y = target.y;
+//     //check for target's left vertical line
+//     //  Itersection point of path and target's left vertical line
+//     var iPLl_x = target.x;
+//     var iPLl_y = line.grad * iPLl_x + line.ref;
+//     //check for target's right vertical line
+//     //  Itersection point of path and target's right vertical line
+//     var iPLr_x = target.x + target.size;
+//     var iPLr_y = line.grad * iPLr_x + line.ref;
+//     //  Check if x value of intersection point is between IRT_x and ILT_x
+//     if (iPLt_x >= ilt_x && iPLt_x <= irt_x){
+//         hit = true;
+//     } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
+//         hit = true;
+//     } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
+//         hit = true;
+//     }
+//     return hit;  
+// };
 Laser.prototype.drawStartPoints = function(h0x, h1y) {
     this.ctx.fillStyle = "#3CFF33";
     this.ctx.fillRect(h0x, this.canvas.height-5, 4, 7); //pos x pos y width height
