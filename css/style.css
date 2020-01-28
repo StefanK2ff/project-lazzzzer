@@ -115,5 +115,26 @@ html {
   .btn {
     width: 200px;
     margin: 0 auto 0 auto;
+    height: 50px;
+    font-size: 20px;
+    border: 5px solid black;
+  }
+
+  .btn:hover {
+    border: 5px solid white;
+    background-color: black;
+    color:white;
+
+  }
+
+  .instructions {
+    width: 500px;
+    padding-top: 50px;
+    margin: 0 auto 0 auto;
+  }
+
+  .instructions p {
+    margin-bottom: 25px;
+    margin-top: 16px;
   }
   

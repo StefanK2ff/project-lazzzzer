@@ -42,9 +42,9 @@ Game.prototype.start = function() {
       this.laser.setAim('left');
     } else if (event.key === 'ArrowRight') {
       this.laser.setAim('right');
-    } else if (event.key === 'a') {
+    } else if (event.key === 'ArrowUp') {
       this.laser.setAim('up');
-    } else if (event.key === 'y') {
+    } else if (event.key === 'ArrowDown') {
       this.laser.setAim('down');
     } else if (event.key === ' ' && !this.gameIsOver) {
       this.fire(); 

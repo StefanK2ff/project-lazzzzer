@@ -18,7 +18,18 @@ function main() {
     <main>
       <div class="gameText">
         <h1>Project laZZZZer</h1>
-        <button class="btn">Start</button>
+      </div>
+      <div class="instructions">
+        <strong>Instructions:</strong>
+          <p>Hit as many targets with the laser reflected by the walls before running out of shots. You will not see the laser during aming, you have to guess its posision! </p>
+          <strong>Commands:</strong>
+          <ul>
+            <li>Use the arrow keys to adjust the first part of the laser (green)</li>
+            <li>Use spacebar to fire the laser against the left wall</li>
+          </ul>
+      </div>
+      <div class="gameText">
+        <button class="btn">START</button>
       </div>
     </main>
   `);
@@ -77,7 +88,7 @@ function main() {
         <h1>Game over</h1>
         <p>Your score: <span class="final-score"></span></p>
         <p>You reached Level <span class="final-level"></span></p>
-        <button class="btn">Restart</button>
+        <button class="btn">RESTART</button>
       </div>
     </main>
     `);
