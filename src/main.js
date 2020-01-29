@@ -17,15 +17,21 @@ function main() {
     splashScreen = buildDom(`
     <main>
       <div class="gameText">
-        <h1>Project laZZZZer</h1>
+        <h1>Project la<span class="highlight">ZZ<span id="offset">Z</span>Z</span>er</h1>
       </div>
       <div class="instructions">
         <strong>Instructions:</strong>
           <p>Hit as many targets with the laser reflected by the walls before running out of shots. You will not see the laser during aiming, you have to guess where he will be reflected! </p>
-          <strong>Commands:</strong>
+          <strong>Commands (keyboard):</strong>
           <ul>
             <li>Use the arrow keys to adjust the first part of the laser (green)</li>
             <li>Use spacebar to fire the laser against the left wall</li>
+          </ul>
+          <strong>Commands (voice):</strong>
+          <p>If you grant the browser access to you microphone, you're able to use these spoken commands:</p>
+          <ul>
+            <li>"Fire" or "Shoot" to fire the laser</li>
+            <li>"Move up" / .."down" / .."left" / .."right" to move the laser </li>
           </ul>
       </div>
       <div class="gameText">
@@ -90,7 +96,7 @@ function main() {
         <h1>Game over</h1>
         <p>Your score: <span class="final-score"></span></p>
         <p>You reached Level <span class="final-level"></span></p>
-        <button class="btn">RESTART</button>
+        <button class="btn" id="start">RESTART</button>
       </div>
     </main>
     `);

@@ -28,7 +28,19 @@ html {
   p {
     margin: 0;
   }
+
+  h1 {
+    margin-top: 60px;
+  }
   
+  .highlight {
+    color: #3CFF33;
+  }
+
+  #offset {
+    animation: letter-flicker 2s linear infinite;
+    color: rgb(145, 14, 14);
+  }
   
   
   /* ---- layout ---- */
@@ -42,9 +54,9 @@ html {
     
   }
   
-  @media (min-width: 768px) {
+  @media (min-width: 600px) {
     .container {
-      max-width: 728px;
+      max-width: 600px;
       margin: 0 auto;
     }
   }
@@ -67,19 +79,17 @@ html {
     align-items: center;
   }
   
-  .game .lives {
+  .game .level {
     flex: 1;
+    
   }
   
   .game .score {
     flex: 1;
+    
   }
 
   .game .shots {
-    flex: 1;
-  }
-  
-  .game .score {
     flex: 1;
   }
   
@@ -133,3 +143,47 @@ html {
     margin-top: 16px;
   }
  
+
+  /* ---- ANIMATION ----- */
+
+  @keyframes letter-flicker {
+  0% {
+    opacity:1.0;
+    text-shadow: 0px 0px 29px rgb(145, 14, 14,1);
+  }
+  2% {
+    opacity:1.0;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  4% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  
+  
+  19% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  21% {
+    opacity:1.0;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  23% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  
+  80% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  83% {
+    opacity:0.4;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+  87% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+  }
+}
