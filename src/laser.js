@@ -128,39 +128,6 @@ Laser.prototype.calculatePath = function() {
     return this.pathArrayPoints;
 };
 
-// Laser.prototype.checkHitTarget = function(target, line) { 
-//     var ilt_x = target.x; // intersection left top x coodrinate
-//     var ilt_y = target.y; // intersection left top y coordinate
-//     var irt_x = target.x + target.size; // right top
-//     var irt_y = target.y;
-//     var ilb_x = target.x + target.size;
-//     var ilb_y = target.y + target.size;
-//     var irb_x = target.x + target.size;
-//     var irb_y = target.y + target.size;
-//     var hit = false;
-
-//     //check for target's upper horizontal line
-//     //  Intersection point of path and target's upper line
-//     var iPLt_x = (target.y - line.ref) / line.grad; // intersectionpoint Path Line top x coordinate
-//     var iPlt_y = target.y;
-//     //check for target's left vertical line
-//     //  Itersection point of path and target's left vertical line
-//     var iPLl_x = target.x;
-//     var iPLl_y = line.grad * iPLl_x + line.ref;
-//     //check for target's right vertical line
-//     //  Itersection point of path and target's right vertical line
-//     var iPLr_x = target.x + target.size;
-//     var iPLr_y = line.grad * iPLr_x + line.ref;
-//     //  Check if x value of intersection point is between IRT_x and ILT_x
-//     if (iPLt_x >= ilt_x && iPLt_x <= irt_x){
-//         hit = true;
-//     } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
-//         hit = true;
-//     } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
-//         hit = true;
-//     }
-//     return hit;  
-// };
 Laser.prototype.drawStartPoints = function(h0x, h1y) {
     this.ctx.fillStyle = "#3CFF33";
     this.ctx.fillRect(h0x, this.canvas.height-5, 4, 7); //pos x pos y width height

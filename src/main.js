@@ -29,7 +29,7 @@ function main() {
           </ul>
       </div>
       <div class="gameText">
-        <button class="btn">START</button>
+        <button class="btn" id="start">START</button>
       </div>
     </main>
   `);
@@ -37,9 +37,11 @@ function main() {
     document.body.appendChild(splashScreen);
 
     var startButton = splashScreen.querySelector('button');
+
     startButton.addEventListener('click', function() {
       startGame();
     });
+    startButton.addEventListener('click', commandSpeech);
   }
 
   function removeSplashScreen() {
@@ -50,7 +52,7 @@ function main() {
 
   function createGameScreen() {
     var gameScreen = buildDom(`
-    <main class="game container">
+    <main class="game container" id="container">
       <header>
         <div class="level">
           <span class="label">Level:</span>
