@@ -47,7 +47,7 @@ function main() {
     startButton.addEventListener('click', function() {
       startGame();
     });
-    startButton.addEventListener('click', commandSpeech);
+    //startButton.addEventListener('click', commandSpeech);
   }
 
   function removeSplashScreen() {
@@ -76,8 +76,11 @@ function main() {
       <div class="canvas-container">
         <canvas></canvas>
       </div>
+      <button id="speechcontrol" class="btn">Give command</button>
     </main>
   `);
+    var speechBtn = gameScreen.querySelector('#speechcontrol');
+    speechBtn.addEventListener('click', commandSpeech);
 
     document.body.appendChild(gameScreen);
     return gameScreen;
