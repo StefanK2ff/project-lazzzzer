@@ -11,7 +11,7 @@ html {
   body {
     margin: 0;
     padding: 0;
-    background-color: black;
+    background-color: rgb(121, 121, 121);
   }
   
   
@@ -64,7 +64,7 @@ html {
   /* ---- STATS ----- */
 
   table {
-    border: 0px solid white;
+    border: 0px ;
     margin: 0 auto 0 auto;
     padding-top: 50px;
   }

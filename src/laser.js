@@ -3,7 +3,6 @@
 function Laser(canvas) {
   this.canvas = canvas;
   this.ctx = this.canvas.getContext('2d');
-  //this.shots = shots;
   this.h0XStart = this.canvas.width * 0.25;
   this.h1yStart = this.canvas.height* 0.75;
   this.h0X = this.h0XStart;
@@ -31,7 +30,10 @@ Laser.prototype.setAim = function(direction) {
 }
 
 Laser.prototype.calculatePath = function() {
-    var proceed = true; 
+    var proceed = true;
+    this.pathArrayPoints = [];
+    this.pathArrayLines = [];
+
     //function to find out if any path hits the middle barrier
     var hitBarrier = function (grad, ref, barrierTop) {
         if(grad * this.canvas.width/2 + ref > barrierTop) {
@@ -59,10 +61,23 @@ Laser.prototype.calculatePath = function() {
         h2Y = 0; // fixed, always at the top of the canvas
         h2X = Number(h2Y-p2ref) / p2grad;
     }
+    this.pathArrayPoints.push(
+        {x: this.h0X,       y: this.h0Y},
+        {x: this.h1X,       y: this.h1Y},
+        {x: h2X,            y: h2Y}
+    );
+    this.pathArrayLines.push(
+        {grad: p1grad, ref:p1ref},
+        {grad: p2grad, ref:p2ref}
+    );
+
     if (proceed) {
         //path and hitpoint 3
         var p3grad = (0 - p2grad);
         var p3ref = Number(h2Y) - Number(p3grad) * Number(h2X);
+        this.pathArrayLines.push(
+            {grad: p3grad, ref:p3ref}
+        );
         if(hitBarrier(p3grad,p3ref,this.barrierTop)) {
             proceed = false;
             var h3X = this.canvas.width/2;
@@ -71,7 +86,10 @@ Laser.prototype.calculatePath = function() {
             var h3X = this.canvas.width; // FIXED, RIGHT border of canvase
             var h3Y = h3X * p3grad + p3ref;
             proceed = true;
-        }   
+        }
+        this.pathArrayPoints.push(
+            {x: h3X,       y: h3Y}
+        );
     }
 
     if (proceed) {
@@ -80,6 +98,9 @@ Laser.prototype.calculatePath = function() {
         var h4X;
         var p4grad = 0-p3grad;
         var p4ref = h3Y - p4grad * h3X;
+        this.pathArrayLines.push(
+            {grad: p4grad, ref:p4ref}
+        );
         if(hitBarrier(p4grad, p4ref, this.barrierTop)) {
             h4X = this.canvas.width/2;
             h4Y = h4X * p4grad + p4ref;
@@ -89,6 +110,9 @@ Laser.prototype.calculatePath = function() {
             h4X = (h4Y - p4ref) / p4grad;
             proceed = false;
         }
+        this.pathArrayPoints.push(
+            {x: h4X,       y: h4Y}
+        );
     }
 
     if (proceed) {
@@ -98,34 +122,18 @@ Laser.prototype.calculatePath = function() {
         var p5ref = h4Y - p5grad * h4X;
         h5X = this.canvas.width;
         h5Y = h5X * p5grad + p5ref;
+        this.pathArrayPoints.push(
+            {x: h5X,       y: h5Y}
+        );
+        this.pathArrayLines.push(
+            {grad: p5grad, ref:p5ref}
+        );
     }
-    
-    //Store all Points
-    this.pathArrayPoints = [ // stores the endpoints of each line
-        {x: this.h0X,       y: this.h0Y},
-        {x: this.h1X,       y: this.h1Y},
-        {x: h2X,            y: h2Y},
-        {x: h3X,            y: h3Y},
-        {x: h4X,            y: h4Y},
-        {x: h5X,            y: h5Y}
-    ];
-    this.helperArrayPoints = [
-        {x: this.h0X,       y: this.h0Y},
-        {x: this.h1X,       y: this.h1Y}
-    ];
     this.helperExtendedArrayPoints = [
         {x: this.h0X,       y: this.h0Y},
         {x: this.h1X,       y: this.h1Y},
         {x: (h2X*0.1),      y: p2grad*(h2X*0.1)+p2ref}
     ];
-
-    this.pathArrayLines = [ // stores the gradients and reference points for each path
-        {grad: p1grad, ref:p1ref},
-        {grad: p2grad, ref:p2ref},
-        {grad: p3grad, ref:p3ref},
-        {grad: p4grad, ref:p4ref},
-    ];
-    console.log(this.pathArrayPoints)
     return this.pathArrayPoints;
 };
 

@@ -9,7 +9,7 @@ function Game() {
   this.gameIsOver = false;
   this.gameScreen = null;
   this.target;
-  this.hitTarget = false;
+  //this.hitTarget = false;
   this.score = 0;
   this.level = 1;
   this.tries = 3;
@@ -139,12 +139,16 @@ Game.prototype.removeGameScreen = function () {
 };
 
 Game.prototype.roundHandling = function () {
-  // check if there was a hit for each part of the laser
-  this.laser.pathArrayLines.forEach(line => {
-    if (this.checkHitTarget(this.target, line)) {
+  // check if there was a hit of a part the laser
+  var i = 0
+  console.log(this.laser.pathArrayLines[i].ref)
+  while (!this.hitTarget && i < this.laser.pathArrayLines.length) {
+    if (this.checkHitTarget(this.target, this.laser.pathArrayLines[i])) {
       this.hitTarget = true;
+    } else {
+      i++;
     };
-  });
+  }
   //do something if there was a hit
   if (this.hitTarget) {
     //set score
@@ -194,38 +198,42 @@ Game.prototype.levelAdjust = function (level) {
   }
 }
 
-Game.prototype.checkHitTarget = function (target, line) {
-  var ilt_x = target.x; // intersection left top x coodrinate
-  var ilt_y = target.y; // intersection left top y coordinate
-  var irt_x = target.x + target.size; // right top
-  var irt_y = target.y;
-  var ilb_x = target.x + target.size;
-  var ilb_y = target.y + target.size;
-  var irb_x = target.x + target.size;
-  var irb_y = target.y + target.size;
+Game.prototype.checkHitTarget = function (targ, line) {
+  console.log("frominside", targ, line)
+  var ilt_x = targ.x; // intersection left top x coodrinate
+  var ilt_y = targ.y; // intersection left top y coordinate
+  var irt_x = targ.x + targ.size; // right top
+  var irt_y = targ.y;
+  var ilb_x = targ.x;
+  var ilb_y = targ.y + targ.size;
+  var irb_x = targ.x + targ.size;
+  var irb_y = targ.y + targ.size;
   var hit = false;
 
-  //check for target's upper horizontal line
-  //  Intersection point of path and target's upper line
-  var iPLt_x = (target.y - line.ref) / line.grad; // intersectionpoint Path Line top x coordinate
-  var iPlt_y = target.y;
-  //check for target's left vertical line
-  //  Itersection point of path and target's left vertical line
-  var iPLl_x = target.x;
+  //check for targ's upper horizontal line
+  //  Intersection point of path and targ's upper line
+  var iPLt_x = (targ.y - line.ref) / line.grad; // intersectionpoint Path Line top x coordinate
+  var iPLt_y = targ.y;
+  //check for targ's left vertical line
+  //  Itersection point of path and targ's left vertical line
+  var iPLl_x = targ.x;
   var iPLl_y = line.grad * iPLl_x + line.ref;
-  //check for target's right vertical line
-  //  Itersection point of path and target's right vertical line
-  var iPLr_x = target.x + target.size;
+  //check for targ's right vertical line
+  //  Itersection point of path and targ's right vertical line
+  var iPLr_x = targ.x + targ.size;
   var iPLr_y = line.grad * iPLr_x + line.ref;
   //  Check if x value of intersection point is between IRT_x and ILT_x
   if (iPLt_x >= ilt_x && iPLt_x <= irt_x) {
-     console.log(iPLt_x,' >= ',ilt_x, '&&' ,iPLt_x,' <=', irt_x)
+     console.log(iPLt_x,' >= ',ilt_x, '&&' ,iPLt_x,' <=', irt_x);
+     console.log(this.laser.pathArrayPoints)
     hit = true;
   } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
      (iPLl_y,' <=', ilb_y,' &&', iPLl_y,' >=', ilt_y)
+     console.log(this.laser.pathArrayPoints)
     hit = true;
   } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
      console.log(iPLr_y,' <= ',irb_y,' && ', iPLr_y,' >= ',irt_y)
+     console.log(this.laser.pathArrayPoints)
     hit = true;
   }
   return hit;
