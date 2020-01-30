@@ -64,9 +64,22 @@ html {
   /* ---- STATS ----- */
 
   table {
-    border: 1px solid white;
+    border: 0px solid white;
+    margin: 0 auto 0 auto;
+    padding-top: 50px;
   }
-  
+
+  table .date {
+    font-size: 0.7em;
+    width: 150px;
+  }
+
+  table .score, .level {
+    width: 100px;
+    font-weight: 700;
+    text-align: center;
+  }
+
   
   /* ---- components ---- */
   

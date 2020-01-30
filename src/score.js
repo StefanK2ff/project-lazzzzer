@@ -7,9 +7,20 @@ function setScore (score, level) {
     var scores = getScores();
     var newScores = [];
     scores.push(newScoreObj(score, level));
-    scores.sort().slice(0,maxNrOfScoreSaved);
-    var scoreString = JSON.stringify(scores)
+    var sortedScore = scores.sort(function(a, b){
+            const element1 = Number(a.score);
+            const element2 = Number(b.score);
+            let comparison = 0;
+            if (element1 > element2) {
+                comparison = 1;
+            } else if (element1 < element2) {
+                comparison = -1;
+            }
+            return comparison*-1;
+        }).slice(0,maxNrOfScoreSaved);
+    var scoreString = JSON.stringify(sortedScore)
     localStorage.setItem("score", scoreString);
+    return sortedScore
 };
 
 function newScoreObj(score, level) {
@@ -23,7 +34,6 @@ function getScores() {
     if (!previousScore) {
       previousScore = [];
     }
-    console.log("got this as previous Score: ", previousScore)
     return previousScore;
 }
 

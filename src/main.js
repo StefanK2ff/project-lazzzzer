@@ -101,7 +101,7 @@ function main() {
         <table id="stats">
           <thead>
             <tr>
-              <th>Date</th>
+              <th>Top 5 games:</th>
               <th>Level</th>
               <th>Score</th>
             </tr>
@@ -123,13 +123,9 @@ function main() {
     span.innerText = level;
 
     var statsTable = gameOverScreen.querySelector('#statsgrid');
-    showStats(statsTable, getScores());
+    showStats(statsTable, setScore(score, level));
 
     document.body.appendChild(gameOverScreen);
-
-    
-    
-
   }
 
   function removeGameOverScreen() {
@@ -158,7 +154,7 @@ function main() {
   function gameOver(score, level) {
     removeGameScreen();
     createGameOverScreen(score, level);
-    setScore(score, level);
+    ;
   }
 
   // -- initialize Splash screen on initial start
