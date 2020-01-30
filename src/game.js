@@ -219,10 +219,13 @@ Game.prototype.checkHitTarget = function (target, line) {
   var iPLr_y = line.grad * iPLr_x + line.ref;
   //  Check if x value of intersection point is between IRT_x and ILT_x
   if (iPLt_x >= ilt_x && iPLt_x <= irt_x) {
+     console.log(iPLt_x,' >= ',ilt_x, '&&' ,iPLt_x,' <=', irt_x)
     hit = true;
   } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
+     (iPLl_y,' <=', ilb_y,' &&', iPLl_y,' >=', ilt_y)
     hit = true;
   } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
+     console.log(iPLr_y,' <= ',irb_y,' && ', iPLr_y,' >= ',irt_y)
     hit = true;
   }
   return hit;

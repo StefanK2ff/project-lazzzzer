@@ -125,6 +125,7 @@ Laser.prototype.calculatePath = function() {
         {grad: p3grad, ref:p3ref},
         {grad: p4grad, ref:p4ref},
     ];
+    console.log(this.pathArrayPoints)
     return this.pathArrayPoints;
 };
 
