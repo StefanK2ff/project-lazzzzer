@@ -39,7 +39,7 @@ html {
 
   #offset {
     animation: letter-flicker 2s linear infinite;
-    color: rgb(145, 14, 14);
+    color: rgb(204, 21, 21);
   }
   
   
@@ -61,7 +61,11 @@ html {
     }
   }
   
-  
+  /* ---- STATS ----- */
+
+  table {
+    border: 1px solid white;
+  }
   
   
   /* ---- components ---- */
@@ -149,41 +153,41 @@ html {
   @keyframes letter-flicker {
   0% {
     opacity:1.0;
-    text-shadow: 0px 0px 29px rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px rgb(204, 21, 21);
   }
   2% {
     opacity:1.0;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   4% {
     opacity:0.1;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   
   
   19% {
     opacity:0.1;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   21% {
     opacity:1.0;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   23% {
     opacity:0.1;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   
   80% {
     opacity:0.1;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   83% {
     opacity:0.4;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
   87% {
     opacity:0.1;
-    text-shadow: 0px 0px 29px  rgb(145, 14, 14,1);
+    text-shadow: 0px 0px 29px  rgb(204, 21, 21);
   }
 }

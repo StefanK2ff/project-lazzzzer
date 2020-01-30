@@ -92,13 +92,25 @@ function main() {
   function createGameOverScreen(score, level) {
     gameOverScreen = buildDom(`
       <main>
-      <div class="gameText">
-        <h1>Game over</h1>
-        <p>Your score: <span class="final-score"></span></p>
-        <p>You reached Level <span class="final-level"></span></p>
-        <button class="btn" id="start">RESTART</button>
-      </div>
-    </main>
+        <div class="gameText">
+          <h1>Game over</h1>
+          <p>Your score: <span class="final-score"></span></p>
+          <p>You reached Level <span class="final-level"></span></p>
+          <button class="btn" id="start">RESTART</button>
+        </div>
+        <table id="stats">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Level</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="statsgrid">
+            
+          </tbody>
+        </table>
+      </main>
     `);
 
     var button = gameOverScreen.querySelector('button');
@@ -110,7 +122,14 @@ function main() {
     var span = gameOverScreen.querySelector('.final-level');
     span.innerText = level;
 
+    var statsTable = gameOverScreen.querySelector('#statsgrid');
+    showStats(statsTable, getScores());
+
     document.body.appendChild(gameOverScreen);
+
+    
+    
+
   }
 
   function removeGameOverScreen() {
@@ -139,6 +158,7 @@ function main() {
   function gameOver(score, level) {
     removeGameScreen();
     createGameOverScreen(score, level);
+    setScore(score, level);
   }
 
   // -- initialize Splash screen on initial start

@@ -75,7 +75,6 @@ Game.prototype.start = function () {
     }
   }
 
-
   // Any function provided to eventListener
   // is always called by window (this === window)!
   // So, we have to bind `this` to the `game` object,

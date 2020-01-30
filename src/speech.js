@@ -17,6 +17,7 @@ var commands = [
 var currentCommand = 'stop';
 
 function commandSpeech() {
+  /*
   var phrase = commands.join(" ");
   var grammar = '#JSGF V1.0; grammar phrase; public <phrase> = ' + phrase + ';';
   var recognition = new SpeechRecognition();
@@ -64,7 +65,7 @@ function commandSpeech() {
     }
 
     recognition.onerror = function (event) {
-      console.log('Error occurred in recognition: ' + event.error);
+      //console.log('Error occurred in recognition: ' + event.error);
     }
 
     recognition.onaudiostart = function (event) {
@@ -106,5 +107,5 @@ function commandSpeech() {
     recognition.onstart = function (event) {
       //Fired when the speech recognition service has begun listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition.
       console.log('SpeechRecognition.onstart');
-    }
+    }*/
   }
