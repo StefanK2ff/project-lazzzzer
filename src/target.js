@@ -15,7 +15,10 @@ Target.prototype.changePosRandom = function() {
 }
 
 Target.prototype.changeXPosRandom = function() {
-    this.x = (this.canvas.width/2 * Math.random() + this.canvas.width/2)-this.size*2;
+    this.x = (this.canvas.width/2 * Math.random() + this.canvas.width/2);
+    if (this.x + this.size > this.canvas.width-this.size) {
+        this.x - this.size;
+    }
 }
 
 Target.prototype.changeYPosRandom = function() {

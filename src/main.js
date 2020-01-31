@@ -76,7 +76,9 @@ function main() {
       <div class="canvas-container">
         <canvas></canvas>
       </div>
-      <button id="speechcontrol" class="btn">Give command</button>
+      <div class="btn-container">
+        <button id="speechcontrol" class="btn">Give command</button>
+      </div>
     </main>
   `);
     var speechBtn = gameScreen.querySelector('#speechcontrol');

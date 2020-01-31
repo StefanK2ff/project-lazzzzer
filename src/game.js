@@ -99,9 +99,9 @@ Game.prototype.startLoop = function () {
     // OBSTACLE: draw the barrier in the middle
     this.laser.drawPath([{
       x: this.canvas.width / 2,
-      y: this.laser.barrierTop
-    }, {
-      x: this.canvas.width / 2,
+      y: this.laser.barrierTop // Top point
+    }, { 
+      x: this.canvas.width / 2, // Bottom piunt
       y: this.canvas.height
     }], "white", 3)
     // Draw the target
@@ -143,7 +143,7 @@ Game.prototype.roundHandling = function () {
   var i = 0
   console.log(this.laser.pathArrayLines[i].ref)
   while (!this.hitTarget && i < this.laser.pathArrayLines.length) {
-    if (this.checkHitTarget(this.target, this.laser.pathArrayLines[i])) {
+    if (this.checkHitTarget(this.target, this.laser.pathArrayLines[i], i)) {
       this.hitTarget = true;
     } else {
       i++;
@@ -198,8 +198,23 @@ Game.prototype.levelAdjust = function (level) {
   }
 }
 
-Game.prototype.checkHitTarget = function (targ, line) {
-  console.log("frominside", targ, line)
+Game.prototype.checkHitBarrier = function (line, lineNr) {
+  var barrT_x = this.canvas.width / 2; // Barrier Top x coordinate
+  var barrT_y = this.laser.barrierTop; // Barrier Top y coordinate
+  //var barrB_x = this.canvas.width / 2; // Barrier Bottom x coordinate
+  var barrB_y = this.canvas.height; // Barrier Bottom y coordinate
+  // intersection point of path and barrier - equal 
+  var iPB_x = barrT_x;
+  var iPB_y = line.grad * iPB_x + line.ref;
+  //check if intersection point is between top and bottom of line
+  if(iPB_y <= barrB_y && iPB_y >= barrT_y && lineNr <= 2) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Game.prototype.checkHitTarget = function (targ, line, lineNr) {
   var ilt_x = targ.x; // intersection left top x coodrinate
   var ilt_y = targ.y; // intersection left top y coordinate
   var irt_x = targ.x + targ.size; // right top
@@ -223,18 +238,36 @@ Game.prototype.checkHitTarget = function (targ, line) {
   var iPLr_x = targ.x + targ.size;
   var iPLr_y = line.grad * iPLr_x + line.ref;
   //  Check if x value of intersection point is between IRT_x and ILT_x
-  if (iPLt_x >= ilt_x && iPLt_x <= irt_x) {
-     console.log(iPLt_x,' >= ',ilt_x, '&&' ,iPLt_x,' <=', irt_x);
-     console.log(this.laser.pathArrayPoints)
+  if (iPLt_x >= ilt_x && iPLt_x <= irt_x && !this.checkHitBarrier(line, lineNr)) {
+     //console.log(iPLt_x,' >= ',ilt_x, '&&' ,iPLt_x,' <=', irt_x);
+     //console.log(this.laser.pathArrayPoints)
     hit = true;
-  } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y) { // Check if y value of intersection point is between ILT_y and ILB_y
-     (iPLl_y,' <=', ilb_y,' &&', iPLl_y,' >=', ilt_y)
-     console.log(this.laser.pathArrayPoints)
+  } else if (iPLl_y <= ilb_y && iPLl_y >= ilt_y && !this.checkHitBarrier(line, lineNr)) { // Check if y value of intersection point is between ILT_y and ILB_y
+     //console.log(this.laser.pathArrayPoints)
     hit = true;
-  } else if (iPLr_y <= irb_y && iPLr_y >= irt_y) { // Check if y value of intersection point is between IRT_y and IRB_y
-     console.log(iPLr_y,' <= ',irb_y,' && ', iPLr_y,' >= ',irt_y)
-     console.log(this.laser.pathArrayPoints)
+  } else if (iPLr_y <= irb_y && iPLr_y >= irt_y && !this.checkHitBarrier(line, lineNr)) { // Check if y value of intersection point is between IRT_y and IRB_y
+     //console.log(iPLr_y,' <= ',irb_y,' && ', iPLr_y,' >= ',irt_y)
+     //console.log(this.laser.pathArrayPoints)
     hit = true;
   }
+  var checkObk = {
+    ilt_x,
+    ilt_y,
+    irt_x,
+    irt_y,
+    ilb_x,
+    ilb_y,
+    irb_x,
+    irb_y,
+    iPLt_x,
+    iPLt_y,
+    iPLl_x,
+    iPLl_y,
+    iPLr_x,
+    iPLr_y,
+    line,
+    hit
+  }
+  console.log("checkObk", checkObk);
   return hit;
 };

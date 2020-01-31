@@ -144,6 +144,11 @@ html {
     font-weight: 700;
   }
 
+  .btn-container {
+    margin: 0 auto 0 auto;
+    padding-bottom: 80px;
+  }
+
   .btn:hover {
     border: 5px solid white;
     background-color: black;
